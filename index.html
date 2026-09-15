@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-accent="purple">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapVault - Store, Customize & Share Photos</title>
+
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Space+Grotesk:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="logo-area">
+      <i class="fa-solid fa-vault logo-icon"></i>
+      <span class="logo-text">SnapVault</span>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-item active" data-tab="gallery">
+        <i class="fa-solid fa-images"></i> <span>All Photos</span>
+      </button>
+
+      <div class="nav-group-title">Collections</div>
+      <button class="nav-item" data-tab="albums">
+        <i class="fa-solid fa-folder-open"></i> <span>Albums</span>
+      </button>
+      <button class="nav-item" data-tab="favorites">
+        <i class="fa-solid fa-heart"></i> <span>Favorites</span>
+      </button>
+
+      <div class="nav-group-title">Customization</div>
+      <button class="nav-item" data-tab="appearance">
+        <i class="fa-solid fa-palette"></i> <span>Themes & Styles</span>
+      </button>
+    </nav>
+
+    <div class="storage-widget">
+      <div class="storage-info">
+        <span>Vault Storage</span>
+        <span id="storageText">Local Dynamic</span>
+      </div>
+      <div class="storage-bar"><div class="storage-fill" id="storageFill" style="width: 35%;"></div></div>
+      <small style="color:var(--text-muted); font-size: 0.75rem;">Simulated Local Storage</small>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <button class="mobile-toggle" id="mobileToggle"><i class="fa-solid fa-bars"></i></button>
+
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search photos by title, tag, or description...">
+      </div>
+
+      <div class="header-actions">
+        <div class="view-switcher">
+          <button class="view-btn active" id="viewGrid" title="Grid View"><i class="fa-solid fa-border-all"></i></button>
+          <button class="view-btn" id="viewMasonry" title="Masonry View"><i class="fa-solid fa-grip-vertical"></i></button>
+        </div>
+
+        <button class="btn btn-primary" id="btnUploadModal">
+          <i class="fa-solid fa-cloud-arrow-up"></i> <span>Upload Photo</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div id="tabGallery" class="tab-pane active">
+        <div class="section-header">
+          <div>
+            <h2>Photo Gallery</h2>
+            <p>Your complete collection of memory snapshots</p>
+          </div>
+          <div class="filter-pills" id="filterPills">
+            <button class="pill active" data-filter="all">All</button>
+            <button class="pill" data-filter="Nature">Nature</button>
+            <button class="pill" data-filter="Architecture">Architecture</button>
+            <button class="pill" data-filter="Abstract">Abstract</button>
+          </div>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+        <div class="empty-state" id="emptyGallery" style="display: none;">
+          <i class="fa-regular fa-image"></i>
+          <h3>No photos found</h3>
+          <p>Try clearing filters or upload new photos to your vault.</p>
+        </div>
+      </div>
+
+      <div id="tabAlbums" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Albums & Categories</h2>
+            <p>Organize your photos into curated collections</p>
+          </div>
+          <button class="btn btn-secondary" id="btnCreateAlbum"><i class="fa-solid fa-folder-plus"></i> New Album</button>
+        </div>
+        <div class="album-grid" id="albumGrid"></div>
+      </div>
+
+      <div id="tabFavorites" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Favorite Shots</h2>
+            <p>Quick access to your bookmarked photos</p>
+          </div>
+        </div>
+        <div class="photo-grid" id="favGrid"></div>
+        <div class="empty-state" id="emptyFavs" style="display: none;">
+          <i class="fa-regular fa-heart"></i>
+          <h3>No favorites yet</h3>
+          <p>Click the heart icon on any photo to add it to your favorites.</p>
+        </div>
+      </div>
+
+      <div id="tabAppearance" class="tab-pane">
+        <div class="section-header">
+          <div>
+            <h2>Customization Studio</h2>
+            <p>Personalize your gallery UI experience</p>
+          </div>
+        </div>
+        <div class="customizer-panel">
+          <div class="customizer-card">
+            <h3><i class="fa-solid fa-moon"></i> Base Mode</h3>
+            <div class="theme-options">
+              <button class="theme-btn active" data-mode="dark"><i class="fa-solid fa-moon"></i> Dark Theme</button>
+              <button class="theme-btn" data-mode="light"><i class="fa-solid fa-sun"></i> Light Theme</button>
+            </div>
+          </div>
+
+          <div class="customizer-card">
+            <h3><i class="fa-solid fa-palette"></i> Accent Color</h3>
+            <div class="color-options" id="accentPicker">
+              <button class="color-swatch active" data-accent="purple" style="background:#8b5cf6;" title="Purple"></button>
+              <button class="color-swatch" data-accent="blue" style="background:#3b82f6;" title="Ocean Blue"></button>
+              <button class="color-swatch" data-accent="emerald" style="background:#10b981;" title="Emerald Green"></button>
+              <button class="color-swatch" data-accent="rose" style="background:#f43f5e;" title="Rose Red"></button>
+              <button class="color-swatch" data-accent="amber" style="background:#f59e0b;" title="Warm Amber"></button>
+            </div>
+          </div>
+
+          <div class="customizer-card">
+            <h3><i class="fa-solid fa-font"></i> Typography</h3>
+            <div class="theme-options" id="fontPicker">
+              <button class="font-btn active" data-font="sans">Inter (Modern)</button>
+              <button class="font-btn" data-font="display">Outfit (Bold)</button>
+              <button class="font-btn" data-font="mono">Space Grotesk</button>
+            </div>
+          </div>
+
+          <div class="customizer-card">
+            <h3><i class="fa-solid fa-table-cells"></i> Card Style</h3>
+            <div class="theme-options" id="cardPicker">
+              <button class="card-btn active" data-card="rounded">Rounded Corners</button>
+              <button class="card-btn" data-card="sharp">Sharp Edges</button>
+              <button class="card-btn" data-card="pill">Soft Curved</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Upload Modal -->
+  <div class="modal" id="uploadModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Upload Photo</h3>
+        <button class="close-btn" id="closeUploadModal">&times;</button>
+      </div>
+      <div class="dropzone" id="dropzone">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <p><strong>Drag & Drop your photo here</strong></p>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">or click to browse from device</p>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      </div>
+      <div id="uploadPreview" style="display: none; text-align: center; margin-bottom: 1rem;">
+        <img id="previewImg" style="max-height: 150px; border-radius: var(--radius-sm); margin-bottom: 0.5rem;" src="" alt="Preview">
+      </div>
+      <div class="form-group">
+        <label>Photo Title</label>
+        <input type="text" id="photoTitle" class="input-control" placeholder="e.g., Sunset over Mountains">
+      </div>
+      <div class="form-group">
+        <label>Tag / Category</label>
+        <input type="text" id="photoTag" class="input-control" placeholder="Nature, Architecture, Abstract, Family...">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" id="photoDesc" class="input-control" placeholder="Add a short memory caption...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelUpload">Cancel</button>
+        <button class="btn btn-primary" id="saveUploadBtn">Save Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo View & Editor Modal -->
+  <div class="modal" id="viewModal">
+    <div class="modal-content large">
+      <div class="modal-header">
+        <h3 id="viewModalTitle">Photo Details</h3>
+        <button class="close-btn" id="closeViewModal">&times;</button>
+      </div>
+      <div class="modal-body-split">
+        <div class="image-viewer-container">
+          <canvas id="editorCanvas"></canvas>
+        </div>
+        <div class="photo-controls">
+          <div class="editor-tabs">
+            <button class="ed-tab active" data-edtab="filters">Filters</button>
+            <button class="ed-tab" data-edtab="adjust">Adjust</button>
+          </div>
+
+          <div id="edTabFilters" class="ed-pane active">
+            <div class="filter-presets">
+              <button class="filter-preset-btn active" data-preset="none">Normal</button>
+              <button class="filter-preset-btn" data-preset="grayscale">Grayscale</button>
+              <button class="filter-preset-btn" data-preset="sepia">Sepia Vintage</button>
+              <button class="filter-preset-btn" data-preset="vivid">Vivid Pop</button>
+              <button class="filter-preset-btn" data-preset="cool">Cool Blue</button>
+              <button class="filter-preset-btn" data-preset="warm">Warm Gold</button>
+            </div>
+          </div>
+
+          <div id="edTabAdjust" class="ed-pane">
+            <div class="slider-group">
+              <label>Brightness <span id="valBrightness">100%</span></label>
+              <input type="range" id="adjBrightness" min="0" max="200" value="100">
+            </div>
+            <div class="slider-group">
+              <label>Contrast <span id="valContrast">100%</span></label>
+              <input type="range" id="adjContrast" min="0" max="200" value="100">
+            </div>
+            <div class="slider-group">
+              <label>Saturation <span id="valSaturate">100%</span></label>
+              <input type="range" id="adjSaturate" min="0" max="200" value="100">
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btnResetFilters"><i class="fa-solid fa-rotate-left"></i> Reset Adjustments</button>
+          </div>
+
+          <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+          <div class="action-buttons-stack">
+            <button class="btn btn-primary" id="btnOpenShareModal"><i class="fa-solid fa-share-nodes"></i> Share Photo</button>
+            <button class="btn btn-secondary" id="btnDownloadEdited"><i class="fa-solid fa-download"></i> Download Photo</button>
+            <button class="btn btn-danger" id="btnDeletePhoto"><i class="fa-solid fa-trash"></i> Delete Photo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="modal" id="shareModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Share Snapshot</h3>
+        <button class="close-btn" id="closeShareModal">&times;</button>
+      </div>
+
+      <div class="share-card-preview" id="shareCardPreview">
+        <img id="shareCardImg" src="" alt="Share Preview">
+        <div class="share-card-info">
+          <h4 id="shareCardTitle">Title</h4>
+          <p id="shareCardDesc">Description</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Direct Share Link</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="shareUrlInput" class="input-control" readonly>
+          <button class="btn btn-primary" id="btnCopyShareUrl"><i class="fa-solid fa-copy"></i></button>
+        </div>
+      </div>
+
+      <div class="qr-container">
+        <div id="qrcode"></div>
+        <small style="color: var(--text-muted);">Scan QR code to open photo directly</small>
+      </div>
+
+      <div class="share-actions">
+        <button class="btn btn-secondary" id="btnShareNative"><i class="fa-solid fa-share"></i> Quick Share</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
